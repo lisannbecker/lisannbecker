@@ -45,7 +45,7 @@ const backgroundStyle = (org: string) => {
 <Base>
   <section class="wrap hero">
     <div>
-      <p class="label" data-fold>{profile.location}</p>
+      <p class="label" data-fold>Based in Amsterdam</p>
       <h1 class="name serif">
         <span data-fold style="--i: 1">Lisann</span>{' '}
         <span data-fold style="--i: 2">Becker</span>
@@ -104,7 +104,6 @@ const backgroundStyle = (org: string) => {
     <a class="arrow-link label more-link" href="/projects">All</a>
   </section>
 </Base>
-
 <style>
   /* Wide screens: name and intro on the left, "Now" on the right.
      Narrower: "Now" drops below as its own section. */
@@ -119,11 +118,6 @@ const backgroundStyle = (org: string) => {
       grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
       align-items: start;
     }
-
-    .now .rows a {
-      flex-direction: column;
-      gap: 0.15rem;
-    }
   }
 
   .now .section-head {
@@ -134,6 +128,11 @@ const backgroundStyle = (org: string) => {
     margin-top: 1.25rem;
   }
 
+  .featured .section-head {
+    border-top: 1px solid var(--line);
+  }
+
+  /* One column: "Now" drops below the intro, with a divider above it. */
   @media (max-width: 63.99rem) {
     .now {
       padding-top: 1.75rem;
@@ -173,13 +172,11 @@ const backgroundStyle = (org: string) => {
     isolation: isolate;
   }
 
-  /* The whole row links to that entry on the resume page. */
+  /* The whole row links to that entry on the resume page. Years always sit under the title. */
   .rows a {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.25rem 1.5rem;
+    flex-direction: column;
+    gap: 0.15rem;
     padding-block: 1rem;
     text-decoration: none;
   }

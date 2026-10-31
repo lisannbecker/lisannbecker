@@ -47,8 +47,19 @@ const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
     </main>
     <Footer />
 
-    <!-- The only JavaScript on the site: unfold [data-fold] elements as they scroll into view. -->
+    <!-- Unfold [data-fold] elements as they scroll into view, and set the overscroll colour. -->
     <script>
+      // Past the middle of the page, overscrolling should reveal black (the footer's colour)
+      // instead of paper. See html.near-end in global.css.
+      const root = document.documentElement;
+      const updateOverscroll = () => {
+        const scrollable = root.scrollHeight - innerHeight;
+        root.classList.toggle('near-end', scrollable > 0 && scrollY > scrollable / 2);
+      };
+      addEventListener('scroll', updateOverscroll, { passive: true });
+      addEventListener('resize', updateOverscroll);
+      updateOverscroll();
+
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {

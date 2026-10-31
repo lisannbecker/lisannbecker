@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
 
 <footer>
   <div class="wrap row">
-    <div>
+    <div class="contact">
       <p class="label email">
         <a href={`mailto:${profile.email}`}>{profile.email}</a>
       </p>
@@ -34,15 +34,23 @@ const year = new Date().getFullYear();
     color: #d6d2ca;
   }
 
+  /* Email and © at the top of the bar, the icons on its bottom edge, with equal padding above
+     and below. */
   .row {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: stretch;
     justify-content: space-between;
     gap: 1.25rem 2rem;
-    /* Content sits towards the top of the bar. */
-    padding-top: clamp(1.75rem, 3vw, 2.5rem);
-    padding-bottom: clamp(4.5rem, 9vw, 6.5rem);
+    min-height: clamp(11rem, 18vw, 14rem);
+    padding-block: clamp(1.75rem, 3vw, 2.5rem);
+  }
+
+  .contact {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
   }
 
   .label {
@@ -66,13 +74,18 @@ const year = new Date().getFullYear();
   .socials {
     display: flex;
     gap: 1.25rem;
-    margin-top: 1.25rem;
     padding: 0;
     list-style: none;
   }
 
   .icon-link {
     display: block;
+    transition: color 0.2s;
+  }
+
+  .icon-link:hover,
+  .icon-link:focus-visible {
+    color: var(--highlight);
   }
 
   .icon {

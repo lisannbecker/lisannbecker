@@ -61,12 +61,28 @@ body {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  background: var(--paper);
   color: var(--ink);
   font-family: var(--sans);
   font-size: var(--text-base);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Overscroll colour: browsers fill the area revealed by overscrolling with the html background
+   (Safari draws body's on top, so body stays transparent and the paper sits on header and main).
+   A script in Base.astro adds .near-end past the middle of the page, so the bounce at the bottom
+   is black like the footer and the bounce at the top matches the page. */
+html {
+  background: var(--paper);
+}
+
+html.near-end {
+  background: #000;
+}
+
+body > header,
+main {
+  background: var(--paper);
 }
 
 main {
