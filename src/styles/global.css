@@ -1,0 +1,269 @@
+/* ---------- Tokens ---------- */
+
+:root {
+  color-scheme: light dark;
+
+  --paper: #ffffff;
+  --surface: #f6f6f4;
+  --ink: #1d1b18;
+  --muted: #6e685f;
+  --line: #e4e4e0;
+  /* Neon highlighter: a solid background, never a text colour. Text on it flips to the
+     opposite of the page text: white in light mode, black in dark mode. */
+  --highlight: #f2ff26;
+  --on-highlight: #ececec;
+  --flap: #e6e6e2;
+
+  --serif: var(--font-serif), Georgia, serif;
+  --sans: var(--font-sans), system-ui, sans-serif;
+  --mono: var(--font-mono), ui-monospace, monospace;
+
+  --text-sm: 0.8125rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.25rem;
+  --text-xl: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
+  --text-display: clamp(3rem, 1.8rem + 5vw, 6rem);
+
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --wide: 68rem;
+  --narrow: 42rem;
+
+  --ease-fold: cubic-bezier(0.2, 0.7, 0.1, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #141311;
+    --surface: #1c1a17;
+    --ink: #ece7de;
+    --muted: #9b948a;
+    --line: #2f2c27;
+    --flap: #2a2723;
+    --on-highlight: #000;
+  }
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  flex: 1;
+  padding-bottom: clamp(4rem, 10vw, 8rem);
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+figure {
+  margin: 0;
+}
+
+/* Spread heading lines evenly so no single word is left alone on the last line. */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  text-decoration-color: var(--line);
+  transition: text-decoration-color 0.2s, color 0.2s;
+}
+
+a:hover {
+  text-decoration-color: currentColor;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--highlight);
+  color: var(--on-highlight);
+}
+
+/* Highlighter stroke: when its link is hovered, a neon band sweeps in behind the text
+   and the text flips to black (in dark mode it would otherwise be light on yellow). */
+.hl {
+  background-image: linear-gradient(var(--highlight), var(--highlight));
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  background-size: 0% 100%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background-size 0.3s var(--ease-fold),
+    color 0.15s 0.1s;
+}
+
+a:hover .hl,
+a:focus-visible .hl {
+  background-size: 100% 100%;
+  color: var(--on-highlight);
+}
+
+/* ---------- Shared helpers ---------- */
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--wide) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.label {
+  font-family: var(--mono);
+  font-size: var(--text-sm);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.serif {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* Links with a › chevron after them.
+   The shape is a small symmetric SVG with a wide, rounded tip, used as a mask so it takes
+   the text colour and scales with the font size. */
+.arrow-link {
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6.5 3 L10 8 L6.5 13'/%3E%3C/svg%3E");
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  text-decoration: none;
+}
+
+.arrow-link::after {
+  content: '';
+  flex: none;
+  width: 0.8em;
+  height: 0.8em;
+  background: currentColor;
+  -webkit-mask: var(--chevron) center / contain no-repeat;
+  mask: var(--chevron) center / contain no-repeat;
+  transition: transform 0.3s var(--ease-fold);
+}
+
+.arrow-link:hover::after {
+  transform: translateX(0.2em);
+}
+
+/* Label column on the left, content on the right (stacked on phones).
+   Baseline alignment keeps the label level with the first line of content. */
+.section {
+  display: grid;
+  gap: 1.25rem 2rem;
+  padding-top: 1.75rem;
+}
+
+@media (min-width: 48rem) {
+  .section {
+    grid-template-columns: 12rem minmax(0, 1fr);
+    align-items: baseline;
+  }
+}
+
+.block {
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+}
+
+/* ---------- Signature: the fold ----------
+   Elements marked data-fold start creased (tilted back from their top edge)
+   and unfold flat when they scroll into view. --i staggers siblings.
+   Only applied when JS is running, so content is never stuck hidden. */
+
+.js [data-fold] {
+  opacity: 0;
+  transform: perspective(900px) rotateX(-14deg) translateY(0.75rem);
+  transform-origin: 50% 0;
+  transition:
+    opacity 0.7s var(--ease-fold),
+    transform 0.9s var(--ease-fold);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+.js [data-fold].is-open {
+  opacity: 1;
+  transform: none;
+}
+
+/* A crease line that is pressed flat from left to right. */
+.crease {
+  height: 1px;
+  border: 0;
+  margin: 0;
+  background: var(--line);
+  transform-origin: 0 50%;
+}
+
+.js .crease[data-fold] {
+  opacity: 1;
+  transform: scaleX(0);
+  transition: transform 1.2s var(--ease-fold);
+}
+
+.js .crease[data-fold].is-open {
+  transform: scaleX(1);
+}
+
+/* Arriving through a page transition: whatever is on screen is already open. */
+.js [data-fold].no-anim {
+  transition: none;
+}
+
+/* Page-to-page transitions, handled natively by the browser. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js [data-fold],
+  .js .crease[data-fold] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

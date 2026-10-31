@@ -1,0 +1,129 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import CreasePattern from './CreasePattern.astro';
+import { projectNumber } from '../utils/projects';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, summary, tags, year, cover, coverAlt, order } = project.data;
+const number = projectNumber(order);
+// Without a cover the big numeral already shows the number, so don't repeat it.
+const meta = [cover ? number : null, year].filter(Boolean).join(' · ');
+---
+
+<a class="card" href={`/projects/${project.id}`}>
+  <div class="sheet">
+    <div class="cover">
+      {
+        cover ? (
+          <Image src={cover} alt={coverAlt ?? ''} widths={[480, 960]} sizes="(min-width: 48rem) 33rem, 100vw" />
+        ) : (
+          <>
+            <CreasePattern seed={order} />
+            <span class="numeral serif" aria-hidden="true">{number}</span>
+          </>
+        )
+      }
+    </div>
+    <div class="body">
+      {meta && <p class="label">{meta}</p>}
+      <h2 class="title serif" style={`view-transition-name: project-${project.id}`}>
+        <span class="hl">{title}</span>
+      </h2>
+      <p class="summary">{summary}</p>
+      {tags.length > 0 && <p class="label tags">{tags.join(' / ')}</p>}
+    </div>
+  </div>
+</a>
+
+<style>
+  /* Registering --fold lets the browser animate it like a length. */
+  @property --fold {
+    syntax: '<length>';
+    inherits: true;
+    initial-value: 0px;
+  }
+
+  .card {
+    --fold: 1.5rem;
+    display: block;
+    height: 100%;
+    text-decoration: none;
+    transition: --fold 0.6s var(--ease-fold);
+  }
+
+  .card:hover,
+  .card:focus-visible {
+    --fold: 0px;
+  }
+
+  /* The sheet has its top-right corner cut off; ::after draws the folded-over flap. */
+  .sheet {
+    position: relative;
+    height: 100%;
+    background: var(--surface);
+    clip-path: polygon(0 0, calc(100% - var(--fold)) 0, 100% var(--fold), 100% 100%, 0 100%);
+  }
+
+  .sheet::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: var(--fold);
+    height: var(--fold);
+    background: linear-gradient(to bottom left, transparent 50%, var(--flap) 50%);
+    filter: drop-shadow(-1px 1px 1px rgb(0 0 0 / 0.08));
+  }
+
+  .cover {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--surface), var(--ink) 4%);
+  }
+
+  .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-fold);
+  }
+
+  .card:hover .cover img {
+    transform: scale(1.03);
+  }
+
+  .numeral {
+    position: absolute;
+    left: 1.25rem;
+    bottom: 0.5rem;
+    font-size: 4.5rem;
+    font-style: italic;
+    line-height: 1;
+    color: color-mix(in oklab, var(--muted) 55%, transparent);
+  }
+
+  .body {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+    line-height: 1.15;
+  }
+
+  .summary {
+    color: var(--muted);
+  }
+
+  .tags {
+    margin-top: 0.25rem;
+  }
+</style>

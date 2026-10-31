@@ -1,0 +1,299 @@
+---
+import fs from 'node:fs';
+import Base from '../layouts/Base.astro';
+import { profile, experience, education, skills, languages } from '../data/resume';
+import { getProjects } from '../utils/projects';
+import { entryId } from '../utils/anchors';
+
+const projects = await getProjects();
+
+// This runs at build time on your machine, so it can check the file system.
+// Drop your CV into public/ under this name and a download link appears.
+const pdf = '/lisann-becker-cv.pdf';
+const hasPdf = fs.existsSync(`public${pdf}`);
+
+const period = (start: string, end: string) => (start === end ? start : `${start} – ${end}`);
+---
+
+<Base title="Resume" description={profile.summary}>
+  <section class="wrap intro">
+    <h1 class="serif" data-fold style="--i: 1">{profile.summary}</h1>
+    <ul class="meta label" data-fold style="--i: 2">
+      <li>{profile.location}</li>
+      <li>
+        <a href={`mailto:${profile.email}`}>
+          <span class="icon" style="--icon: url(/icon-email.svg)" aria-hidden="true"></span>{profile.email}
+        </a>
+      </li>
+      <li>
+        <a href={profile.github}>
+          <span class="icon" style="--icon: url(/github-white.png)" aria-hidden="true"></span>GitHub
+        </a>
+      </li>
+      <li>
+        <a href={profile.linkedin}>
+          <span class="icon" style="--icon: url(/linkedin.png)" aria-hidden="true"></span>LinkedIn
+        </a>
+      </li>
+      {hasPdf && <li><a class="download" href={pdf} download>Download PDF</a></li>}
+    </ul>
+  </section>
+
+  <section class="wrap block">
+    <hr class="crease" data-fold />
+    <div class="section">
+      <h2 class="label">Experience</h2>
+      <ol class="entries">
+        {
+          experience.map((role) => (
+            <li data-fold id={entryId(role)}>
+              <div class="head">
+                <h3>
+                  {role.title} <span class="at">at</span>{' '}
+                  {role.url ? <a href={role.url}>{role.org}</a> : role.org}
+                </h3>
+                <p class="label">{period(role.start, role.end)}</p>
+              </div>
+              <p class="label">{role.location}</p>
+              <ul class="points">
+                {role.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap block">
+    <hr class="crease" data-fold />
+    <div class="section">
+      <h2 class="label">Education</h2>
+      <ol class="entries">
+        {
+          education.map((item) => (
+            <li data-fold id={entryId(item)}>
+              <div class="head">
+                <h3>
+                  {item.title} <span class="at">at</span> {item.org}
+                </h3>
+                <p class="label">{period(item.start, item.end)}</p>
+              </div>
+              <p class="label">{item.location}</p>
+              <ul class="points">
+                {item.points.map((point) => <li>{point}</li>)}
+              </ul>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap block">
+    <hr class="crease" data-fold />
+    <div class="section">
+      <h2 class="label">Skills</h2>
+      <dl class="pairs">
+        {
+          skills.map((skill, i) => (
+            <div data-fold style={`--i: ${i}`}>
+              <dt>{skill.group}</dt>
+              <dd>{skill.items}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="wrap block">
+    <hr class="crease" data-fold />
+    <div class="section">
+      <h2 class="label">Languages</h2>
+      <dl class="pairs languages">
+        {
+          languages.map((language, i) => (
+            <div data-fold style={`--i: ${i}`}>
+              <dt>{language.name}</dt>
+              <dd class="label">{language.level}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <section class="wrap block">
+    <hr class="crease" data-fold />
+    <div class="section">
+      <h2 class="label">Projects</h2>
+      <ul class="project-links">
+        {
+          projects.map((project, i) => (
+            <li data-fold style={`--i: ${i}`}>
+              <a class="arrow-link" href={`/projects/${project.id}`}>{project.data.title}</a>
+              <span>{project.data.summary}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-top: clamp(2.5rem, 8vw, 6rem);
+  }
+
+  h1 {
+    max-width: 56rem;
+    margin-top: 1.25rem;
+    font-size: var(--text-xl);
+    line-height: 1.2;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin-top: 2rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Icons are used as masks filled with the text colour, so their original colours are ignored
+     and they follow light and dark mode like the text next to them. */
+  .icon {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: 0.45em;
+    vertical-align: -0.15em;
+    background: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
+  .entries,
+  .points,
+  .project-links {
+    padding: 0;
+    list-style: none;
+  }
+
+  .entries {
+    display: grid;
+    gap: 2.75rem;
+    max-width: var(--narrow);
+  }
+
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+  }
+
+  h3 {
+    font-size: var(--text-base);
+    font-weight: 500;
+  }
+
+  /* Arriving from a link like /resume#software-engineer-tesla: leave some room above the entry
+     and briefly mark its heading with the highlighter. */
+  .entries > li {
+    scroll-margin-top: 2.5rem;
+  }
+
+  .entries > li:target h3 {
+    animation: arrived 2.4s var(--ease-fold);
+  }
+
+  @keyframes arrived {
+    0%,
+    40% {
+      background: var(--highlight);
+      box-shadow: 0 0 0 0.25em var(--highlight);
+      color: var(--on-highlight);
+    }
+    100% {
+      background: transparent;
+      box-shadow: 0 0 0 0.25em transparent;
+    }
+  }
+
+  .at {
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .points {
+    display: grid;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+  }
+
+  /* Dash bullets for every list on the resume except Languages. */
+  .points li,
+  .pairs:not(.languages) > div,
+  .project-links li {
+    position: relative;
+    padding-left: 1.25rem;
+  }
+
+  .points li::before,
+  .pairs:not(.languages) > div::before,
+  .project-links li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.5rem;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .pairs {
+    display: grid;
+    gap: 1.25rem;
+    max-width: var(--narrow);
+    margin: 0;
+  }
+
+  dt {
+    font-weight: 500;
+  }
+
+  dd {
+    margin: 0.15rem 0 0;
+  }
+
+  .languages {
+    gap: 0.6rem;
+    max-width: 20rem;
+  }
+
+  .languages div {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .project-links {
+    display: grid;
+    gap: 1rem;
+    max-width: var(--narrow);
+  }
+
+  .project-links li {
+    display: grid;
+    gap: 0.1rem;
+  }
+
+  .project-links span {
+    color: var(--muted);
+  }
+</style>

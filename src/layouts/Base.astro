@@ -1,0 +1,66 @@
+---
+import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { profile } from '../data/resume';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = `${profile.name}: ${profile.role}, based in Amsterdam.` } = Astro.props;
+const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Font cssVariable="--font-serif" preload />
+    <Font cssVariable="--font-sans" preload />
+    <Font cssVariable="--font-mono" />
+    <!-- is:inline = leave this script exactly as written, run it before the page paints -->
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // During a page transition the browser animates the change itself, so skip the fold for
+      // anything already on screen. Otherwise the morphing project title would land on a hidden card.
+      addEventListener('pagereveal', (event) => {
+        if (!event.viewTransition) return;
+        document.querySelectorAll('[data-fold]').forEach((el) => {
+          if (el.getBoundingClientRect().top < innerHeight) el.classList.add('is-open', 'no-anim');
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- The only JavaScript on the site: unfold [data-fold] elements as they scroll into view. -->
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-open');
+              observer.unobserve(entry.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px' },
+      );
+      document.querySelectorAll('[data-fold]').forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

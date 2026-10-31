@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../utils/projects';
+
+const projects = await getProjects();
+---
+
+<Base title="Projects" description="AI and coding projects by Lisann Becker.">
+  <section class="wrap intro">
+    <h1 class="serif" data-fold style="--i: 1">
+      Research, challenges, things built for fun
+    </h1>
+  </section>
+
+  <section class="wrap">
+    <ul class="grid">
+      {
+        projects.map((project, i) => (
+          <li data-fold style={`--i: ${i % 2}`}>
+            <ProjectCard project={project} />
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-top: clamp(2.5rem, 8vw, 6rem);
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  h1 {
+    margin-top: 1.25rem;
+    font-size: var(--text-xl);
+    line-height: 1.2;
+  }
+
+  .grid {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2rem);
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (min-width: 48rem) {
+    .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>

@@ -1,0 +1,270 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile, experience, education } from '../data/resume';
+import { getProjects, projectNumber } from '../utils/projects';
+import { entryId } from '../utils/anchors';
+
+// Current roles show the whole time at that company, e.g. Tesla from the 2023 internship on.
+const firstYearAt = (org: string) =>
+  experience
+    .filter((role) => role.org === org)
+    .map((role) => role.start)
+    .sort()[0];
+
+const now = [
+  ...experience
+    .filter((role) => role.end === 'Present')
+    .map((role) => ({ ...role, start: firstYearAt(role.org) })),
+  education[0],
+];
+const featured = (await getProjects()).filter((project) => project.data.featured);
+
+// Shorter names for the "Now" rows only, so each fits on one line. The resume keeps the full names.
+const shortNames: Record<string, string> = {
+  'University of Amsterdam': 'UvA',
+};
+
+// Background image per "Now" row, from public/. Other options to try:
+// Tesla: /robotaxi.png.webp · Origami CV: /origami-wordmark.png · UvA: /neuralnet.png, /activation.webp
+// size: how the image fills the row. Default 'cover' fills it (cropping the edges); 'contain'
+// shows the whole image; '180% auto' zooms in; 'auto 80%' makes it 80% of the row's height.
+// position: where it sits in the row, e.g. 'center bottom'. Default 'center'.
+const backgrounds: Record<string, { src: string; size?: string; position?: string }> = {
+  Tesla: { src: '/teslarain.jpg' },
+  'Origami CV': { src: '/origami.svg', size: '120% auto', position: 'left 5.5rem top -4rem' },
+  'University of Amsterdam': { src: '/nn-mlp.svg', size: '240% auto', position: '82.3% center' },
+};
+
+const backgroundStyle = (org: string) => {
+  const bg = backgrounds[org];
+  if (!bg) return '--bg: none';
+  return `--bg: url(${bg.src}); --bg-size: ${bg.size ?? 'cover'}; --bg-position: ${bg.position ?? 'center'}`;
+};
+---
+
+<Base>
+  <section class="wrap hero">
+    <div>
+      <p class="label" data-fold>{profile.location}</p>
+      <h1 class="name serif">
+        <span data-fold style="--i: 1">Lisann</span>{' '}
+        <span data-fold style="--i: 2">Becker</span>
+      </h1>
+      <p class="intro" data-fold style="--i: 3">
+        {profile.intro}
+      </p>
+    </div>
+
+    <aside class="now" aria-labelledby="now-title">
+      <div class="section-head" data-fold style="--i: 3">
+        <h2 class="label" id="now-title">Now</h2>
+      </div>
+      <ul class="rows">
+        {
+          now.map((item, i) => (
+            <li
+              data-fold
+              style={`--i: ${i + 4}; ${backgroundStyle(item.org)}`}
+            >
+              <a href={`/resume#${entryId(item)}`}>
+                <span>
+                  {item.title} at {shortNames[item.org] ?? item.org}
+                </span>
+                <span class="label">{item.start} – {item.end}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="arrow-link label more-link" href="/resume" data-fold style="--i: 7">Resume</a>
+    </aside>
+  </section>
+
+  <section class="wrap featured">
+    <div class="section-head">
+      <h2 class="label">Selected projects</h2>
+    </div>
+    <ul class="projects">
+      {
+        featured.map((project, i) => (
+          <li data-fold style={`--i: ${i}`}>
+            <a href={`/projects/${project.id}`}>
+              <span class="label">{projectNumber(project.data.order)}</span>
+              <span>
+                <span class="title serif" style={`view-transition-name: project-${project.id}`}>
+                  <span class="hl">{project.data.title}</span>
+                </span>
+                <span class="summary">{project.data.summary}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <a class="arrow-link label more-link" href="/projects">All</a>
+  </section>
+</Base>
+
+<style>
+  /* Wide screens: name and intro on the left, "Now" on the right.
+     Narrower: "Now" drops below as its own section. */
+  .hero {
+    display: grid;
+    gap: clamp(3.5rem, 8vw, 6rem) 4rem;
+    padding-top: clamp(3rem, 12vw, 9rem);
+  }
+
+  @media (min-width: 64rem) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+      align-items: start;
+    }
+
+    .now .rows a {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+  }
+
+  .now .section-head {
+    padding-top: 0;
+  }
+
+  .more-link {
+    margin-top: 1.25rem;
+  }
+
+  @media (max-width: 63.99rem) {
+    .now {
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  .name {
+    margin-top: 1.25rem;
+    font-size: var(--text-display);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+  }
+
+  .name span {
+    display: inline-block;
+  }
+
+  .intro {
+    max-width: 34rem;
+    margin-top: 2rem;
+    font-size: var(--text-lg);
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .rows,
+  .projects {
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Same row rhythm as the project list below. */
+  .rows li {
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    isolation: isolate;
+  }
+
+  /* The whole row links to that entry on the resume page. */
+  .rows a {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1.5rem;
+    padding-block: 1rem;
+    text-decoration: none;
+  }
+
+  .rows li:last-child {
+    border-bottom: 0;
+  }
+
+  /* The row's image: faint, softened colour, printed into the paper on the right and fading out
+     toward the text. Hovering the row brings it up to full strength. */
+  .rows li::before {
+    content: '';
+    position: absolute;
+    /* -1px reaches over the divider, so no paper-coloured sliver shows when the row height
+       lands between pixels. */
+    inset: 0 0 -1px 30%;
+    z-index: -1;
+    background: var(--bg) var(--bg-position, center) / var(--bg-size, cover) no-repeat;
+    filter: saturate(0.7);
+    mix-blend-mode: multiply;
+    opacity: 0.3;
+    mask-image: linear-gradient(to right, transparent, #000 60%);
+    transition:
+      opacity 0.5s var(--ease-fold),
+      filter 0.5s var(--ease-fold);
+  }
+
+  .rows li:hover::before {
+    opacity: 0.55;
+    filter: saturate(1);
+  }
+
+  /* On dark paper, multiply would turn everything black, so invert and lighten instead. */
+  @media (prefers-color-scheme: dark) {
+    /* Inverting flips the hues too, so rotate them back: red stays red. */
+    .rows li::before {
+      filter: invert(1) hue-rotate(180deg) saturate(0.7);
+      mix-blend-mode: screen;
+      opacity: 0.22;
+    }
+
+    .rows li:hover::before {
+      filter: invert(1) hue-rotate(180deg) saturate(1);
+      opacity: 0.4;
+    }
+  }
+
+  .projects a {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    align-items: baseline;
+    padding-block: 1rem;
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .projects li:first-child a {
+    padding-top: 0.25rem;
+  }
+
+  .projects li:last-child a {
+    border-bottom: 0;
+  }
+
+  .title {
+    display: block;
+    font-size: var(--text-xl);
+    line-height: 1.15;
+  }
+
+  .summary {
+    display: block;
+    margin-top: 0.35rem;
+    color: var(--muted);
+  }
+
+  /* Extra room between the intro and the project list. */
+  .featured {
+    margin-top: clamp(4.5rem, 10vw, 8rem);
+  }
+
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-block: 1.75rem 1.25rem;
+  }
+</style>

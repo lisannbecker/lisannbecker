@@ -1,0 +1,86 @@
+---
+import { profile } from '../data/resume';
+
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="wrap row">
+    <div>
+      <p class="label email">
+        <a href={`mailto:${profile.email}`}>{profile.email}</a>
+      </p>
+      <ul class="socials">
+        <li>
+          <a class="icon-link" href={profile.github} aria-label="GitHub">
+            <span class="icon" style="--icon: url(/github-white.png)" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="icon-link" href={profile.linkedin} aria-label="LinkedIn">
+            <span class="icon" style="--icon: url(/linkedin.png)" aria-hidden="true"></span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <p class="label">© {year}</p>
+  </div>
+</footer>
+
+<style>
+  /* A full-width black bar; the content inside still lines up with the rest of the page. */
+  footer {
+    background: #000;
+    color: #d6d2ca;
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    /* Content sits towards the top of the bar. */
+    padding-top: clamp(1.75rem, 3vw, 2.5rem);
+    padding-bottom: clamp(4.5rem, 9vw, 6.5rem);
+  }
+
+  .label {
+    color: inherit;
+  }
+
+  a {
+    text-decoration-color: rgb(255 255 255 / 0.3);
+  }
+
+  a:hover {
+    color: #fff;
+    text-decoration-color: currentColor;
+  }
+
+  .email {
+    overflow-wrap: anywhere;
+  }
+
+  /* GitHub and LinkedIn as large icons under the email, filled with the footer's text colour. */
+  .socials {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .icon-link {
+    display: block;
+  }
+
+  .icon {
+    display: block;
+    width: 1.6rem;
+    height: 1.6rem;
+    background: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+</style>

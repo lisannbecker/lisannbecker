@@ -1,0 +1,72 @@
+---
+const nav = [
+  { href: '/resume', label: 'Resume' },
+  { href: '/projects', label: 'Projects' },
+];
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(`${href}/`);
+---
+
+<header>
+  <nav class="wrap bar" aria-label="Main">
+    <a class="tab" href="/" aria-current={isActive('/') ? 'page' : undefined}>Home</a>
+    <div class="tabs">
+      {
+        nav.map((item) => (
+          <a class="tab" href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+</header>
+
+<style>
+  header {
+    view-transition-name: site-header;
+  }
+
+  /* Home on the left, the other pages on the right. The min-height keeps the header the
+     same height as when it held the larger LB monogram, so the page below doesn't shift. */
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 5.75rem;
+    padding-block: 1.5rem;
+    font-family: var(--mono);
+    font-size: var(--text-sm);
+  }
+
+  .tabs {
+    display: flex;
+    gap: 1.75rem;
+  }
+
+  .tab {
+    position: relative;
+    isolation: isolate;
+    text-decoration: none;
+    color: var(--muted);
+  }
+
+  .tab:hover {
+    color: var(--ink);
+  }
+
+  /* Active page is marked with a neon highlighter block behind black text. */
+  .tab[aria-current='page'] {
+    color: #000;
+  }
+
+  .tab[aria-current='page']::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: -0.1em -0.3em;
+    background: var(--highlight);
+  }
+</style>

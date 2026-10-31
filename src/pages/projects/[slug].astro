@@ -1,0 +1,165 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getProjects } from '../../utils/projects';
+
+// [slug] in the file name makes this a template: Astro builds one page per entry returned here.
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+const { project, next } = Astro.props;
+const { title, summary, year, tags, cover, coverAlt, images, links } = project.data;
+const { Content } = await render(project);
+---
+
+<Base title={title} description={summary}>
+  <article class="wrap">
+    <header>
+      <p class="label" data-fold>
+        {[year, ...tags].filter(Boolean).join(' · ')}
+      </p>
+      <h1 class="serif" data-fold style={`--i: 1; view-transition-name: project-${project.id}`}>{title}</h1>
+      <p class="summary" data-fold style="--i: 2">{summary}</p>
+      {
+        links.length > 0 && (
+          <p class="links" data-fold style="--i: 3">
+            {links.map((link) => (
+              <a class="arrow-link" href={link.href}>
+                {link.label}
+              </a>
+            ))}
+          </p>
+        )
+      }
+    </header>
+
+    {
+      cover && (
+        <figure class="cover" data-fold>
+          <Image src={cover} alt={coverAlt ?? ''} widths={[800, 1600]} sizes="(min-width: 72rem) 68rem, 100vw" />
+        </figure>
+      )
+    }
+
+    <div class="prose" data-fold>
+      <Content />
+    </div>
+
+    {
+      images.length > 0 && (
+        <div class="gallery">
+          {images.map((img, i) => (
+            <figure data-fold style={`--i: ${i}`}>
+              <Image src={img.src} alt={img.alt} widths={[600, 1200]} sizes="(min-width: 48rem) 33rem, 100vw" />
+            </figure>
+          ))}
+        </div>
+      )
+    }
+
+    <nav class="next block" aria-label="Next project">
+      <hr class="crease" data-fold />
+      <a href={`/projects/${next.id}`}>
+        <span class="label">Next project</span>
+        <span class="serif arrow-link"><span class="hl">{next.data.title}</span></span>
+      </a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  header {
+    max-width: 48rem;
+    padding-block: clamp(2rem, 6vw, 4rem);
+  }
+
+  h1 {
+    margin-top: 1rem;
+    font-size: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+  }
+
+  .summary {
+    margin-top: 1.25rem;
+    font-size: var(--text-lg);
+    color: var(--muted);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .cover {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  /* Markdown content isn't part of this component's template, so its styles need :global(). */
+  .prose {
+    max-width: var(--narrow);
+  }
+
+  .prose > :global(* + *) {
+    margin-top: 1.1em;
+  }
+
+  .prose > :global(:first-child) {
+    margin-top: 0;
+  }
+
+  .prose :global(h2) {
+    margin-top: 1.5em;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: var(--text-xl);
+    line-height: 1.2;
+  }
+
+  .prose :global(h3) {
+    margin-top: 1.75em;
+    font-size: var(--text-base);
+    font-weight: 500;
+  }
+
+  .prose :global(code) {
+    font-family: var(--mono);
+    font-size: 0.9em;
+  }
+
+  .prose :global(img) {
+    margin-block: 2em;
+  }
+
+  .gallery {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  @media (min-width: 48rem) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .next a {
+    display: grid;
+    gap: 0.35rem;
+    padding-top: 1.75rem;
+    text-decoration: none;
+  }
+
+  .next .serif {
+    font-size: var(--text-xl);
+    line-height: 1.2;
+  }
+</style>
