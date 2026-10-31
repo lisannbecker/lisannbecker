@@ -137,7 +137,9 @@ a:hover {
 }
 
 /* Highlighter stroke: when its link is hovered, a neon band sweeps in behind the text
-   and the text flips to black (in dark mode it would otherwise be light on yellow). */
+   and the text flips to black (in dark mode it would otherwise be light on yellow).
+   On touch screens .is-touched stands in for hover (see the script in Base.astro). :hover only
+   counts with a real pointer: phones leave a tapped link in :hover after the finger lifts. */
 .hl {
   background-image: linear-gradient(var(--highlight), var(--highlight));
   background-repeat: no-repeat;
@@ -150,10 +152,17 @@ a:hover {
     color 0.15s 0.1s;
 }
 
-a:hover .hl,
+a.is-touched .hl,
 a:focus-visible .hl {
   background-size: 100% 100%;
   color: var(--on-highlight);
+}
+
+@media (hover: hover) {
+  a:hover .hl {
+    background-size: 100% 100%;
+    color: var(--on-highlight);
+  }
 }
 
 /* ---------- Shared helpers ---------- */

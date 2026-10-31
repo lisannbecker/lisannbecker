@@ -73,5 +73,49 @@ const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
       );
       document.querySelectorAll('[data-fold]').forEach((el) => observer.observe(el));
     </script>
+
+    <!-- Light up links under a finger on touch screens. -->
+    <script>
+      // Touch screens have no hover, so a link gets .is-touched while a finger rests on it,
+      // including while that finger scrolls the page. Lifting after a scroll turns it off again;
+      // lifting after a tap keeps it on until the linked page has loaded.
+      // Passive listeners never delay scrolling.
+      let touched: Element | null = null;
+      let start = { x: 0, y: 0 };
+      let scrolling = false;
+
+      const release = () => {
+        touched?.classList.remove('is-touched');
+        touched = null;
+      };
+
+      addEventListener(
+        'touchstart',
+        (event) => {
+          release();
+          const { clientX, clientY } = event.touches[0];
+          start = { x: clientX, y: clientY };
+          scrolling = false;
+          touched = (event.target as Element).closest('a');
+          touched?.classList.add('is-touched');
+        },
+        { passive: true },
+      );
+
+      // Once a finger travels more than a few pixels it's scrolling, and the browser won't follow the link.
+      addEventListener(
+        'touchmove',
+        (event) => {
+          const { clientX, clientY } = event.touches[0];
+          if (Math.hypot(clientX - start.x, clientY - start.y) > 10) scrolling = true;
+        },
+        { passive: true },
+      );
+
+      addEventListener('touchend', () => scrolling && release(), { passive: true });
+      addEventListener('touchcancel', release, { passive: true });
+      // Coming back from the linked page, the link may still be lit from the tap that left.
+      addEventListener('pageshow', release);
+    </script>
   </body>
 </html>
