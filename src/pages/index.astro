@@ -11,11 +11,12 @@ const firstYearAt = (org: string) =>
     .map((role) => role.start)
     .sort()[0];
 
+// The MSc leads: it's the headline qualification.
 const now = [
+  education[0],
   ...experience
     .filter((role) => role.end === 'Present')
     .map((role) => ({ ...role, start: firstYearAt(role.org) })),
-  education[0],
 ];
 const featured = (await getProjects()).filter((project) => project.data.featured);
 // Set to true to show the Origami CV link beside the social icons again.
@@ -47,7 +48,7 @@ const backgroundStyle = (org: string) => {
 <Base>
   <section class="wrap hero">
     <div>
-      <p class="label" data-fold>Based in Amsterdam</p>
+      <p class="label" data-fold>MSc AI, Based in Amsterdam</p>
       <h1 class="name serif">
         <span data-fold style="--i: 1">Lisann</span>{' '}
         <span data-fold style="--i: 2">Becker</span>
@@ -74,10 +75,7 @@ const backgroundStyle = (org: string) => {
       </ul>
     </div>
 
-    <aside class="now" aria-labelledby="now-title">
-      <div class="section-head" data-fold style="--i: 3">
-        <h2 class="label" id="now-title">Now</h2>
-      </div>
+    <aside class="now" aria-label="Now">
       <ul class="rows">
         {
           now.map((item, i) => (
@@ -95,7 +93,6 @@ const backgroundStyle = (org: string) => {
           ))
         }
       </ul>
-      <a class="arrow-link label more-link" href="/resume" data-fold style="--i: 7">Resume</a>
     </aside>
   </section>
 
@@ -139,10 +136,6 @@ const backgroundStyle = (org: string) => {
     }
   }
 
-  .now .section-head {
-    padding-top: 0;
-  }
-
   .more-link {
     margin-top: 1.25rem;
   }
@@ -151,13 +144,6 @@ const backgroundStyle = (org: string) => {
     border-top: 1px solid var(--line);
   }
 
-  /* One column: "Now" drops below the intro, with a divider above it. */
-  @media (max-width: 63.99rem) {
-    .now {
-      padding-top: 1.75rem;
-      border-top: 1px solid var(--line);
-    }
-  }
 
   .name {
     margin-top: 1.25rem;
@@ -257,7 +243,7 @@ const backgroundStyle = (org: string) => {
     inset: 0 0 -1px 30%;
     z-index: -1;
     background: var(--bg) var(--bg-position, center) / var(--bg-size, cover) no-repeat;
-    filter: saturate(0.7);
+    filter: saturate(0);
     mix-blend-mode: multiply;
     opacity: 0.3;
     mask-image: linear-gradient(to right, transparent, #000 60%);
@@ -275,7 +261,7 @@ const backgroundStyle = (org: string) => {
   @media (prefers-color-scheme: dark) {
     /* Inverting flips the hues too, so rotate them back: red stays red. */
     .rows li::before {
-      filter: invert(1) hue-rotate(180deg) saturate(0.7);
+      filter: invert(1) hue-rotate(180deg) saturate(0);
       mix-blend-mode: screen;
       opacity: 0.22;
     }
@@ -317,7 +303,7 @@ const backgroundStyle = (org: string) => {
 
   /* Extra room between the intro and the project list. */
   .featured {
-    margin-top: clamp(4.5rem, 10vw, 8rem);
+    margin-top: clamp(7rem, 10vw, 8rem);
   }
 
   .section-head {

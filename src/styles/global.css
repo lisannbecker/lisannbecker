@@ -3,16 +3,16 @@
 :root {
   color-scheme: light dark;
 
-  --paper: #ffffff;
-  --surface: #f6f6f4;
+  --paper: #ebebeb;
+  --surface: #f5f5f5;
   --ink: #1d1b18;
   --muted: #6e685f;
-  --line: #e4e4e0;
+  --line: #d6d6d6;
   /* Neon highlighter: a solid background, never a text colour. Text on it flips to the
      opposite of the page text: white in light mode, black in dark mode. */
-  --highlight: #f2ff26;
+  --highlight: #f2ff00;
   --on-highlight: #ececec;
-  --flap: #e6e6e2;
+  --flap: #d4d4d4;
 
   --serif: var(--font-serif), Georgia, serif;
   --sans: var(--font-sans), system-ui, sans-serif;
@@ -87,7 +87,7 @@ main {
 
 main {
   flex: 1;
-  padding-bottom: clamp(4rem, 10vw, 8rem);
+  padding-bottom: 8rem;
 }
 
 h1,
