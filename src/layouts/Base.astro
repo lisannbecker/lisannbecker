@@ -80,14 +80,19 @@ const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
       // including while that finger scrolls the page. Lifting after a scroll turns it off again;
       // lifting after a tap keeps it on until the linked page has loaded.
       // Passive listeners never delay scrolling.
+      // iPhones are the exception: a finger that lands on a page still gliding from a flick isn't
+      // reported to the page at all (WebKit ignores it on purpose), so nothing can light up then.
       let touched: Element | null = null;
       let start = { x: 0, y: 0 };
       let scrolling = false;
+      let lastScroll = 0;
 
       const release = () => {
         touched?.classList.remove('is-touched');
         touched = null;
       };
+
+      addEventListener('scroll', () => (lastScroll = performance.now()), { passive: true });
 
       addEventListener(
         'touchstart',
@@ -95,7 +100,8 @@ const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
           release();
           const { clientX, clientY } = event.touches[0];
           start = { x: clientX, y: clientY };
-          scrolling = false;
+          // A finger that lands on a gliding page only stops it; the browser won't follow the link.
+          scrolling = performance.now() - lastScroll < 100;
           touched = (event.target as Element).closest('a');
           touched?.classList.add('is-touched');
         },
