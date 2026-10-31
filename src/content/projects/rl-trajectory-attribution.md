@@ -1,11 +1,13 @@
 ---
 title: Explainability in Reinforcement Learning
 summary: Can an RL agent's decision be explained by the experience that shaped it? Reproducing trajectory attribution, and finding its clusters less meaningful than claimed.
-order: 5
+order: 7
 tags: [Reinforcement learning, Explainability]
+cover: ../../assets/projects/rl-trajectory-attribution/cover.png
+coverAlt: "Frame from the Atari game Seaquest: a submarine underwater among fish, above the seabed and oxygen bar"
 papers:
   - label: Paper
-    href: /fact_checkers.pdf
+    href: /FACT_checkers.pdf
 # poster: /...
 code: https://github.com/lisannbecker/RL_Trajectories-extension
 ---

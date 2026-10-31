@@ -3,6 +3,8 @@ title: Mechanism Preservation Across Model Compression
 summary: A compressed model can match the original's answers without working the same way inside. Tracing which mechanisms survive distillation and fine-tuning.
 order: 2
 tags: [Interpretability, Model compression]
+cover: ../../assets/projects/mechanism-preservation/cover.png
+coverAlt: "Histogram of crosscoder features for GPT-2 and its distilled student: first, middle and final layers, from student-only through shared to teacher-only"
 featured: true
 papers:
   - label: Paper

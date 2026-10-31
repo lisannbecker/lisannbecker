@@ -1,8 +1,10 @@
 ---
 title: EB-NeRD Challenge
 summary: Do LLMs make news recommendations better? Reproducing ONCE on EB-NeRD, with LLaMA encoding articles and GPT-3.5 enriching them.
-order: 6
+order: 8
 tags: [Recommender systems, LLMs]
+cover: ../../assets/projects/eb-nerd/cover.png
+coverAlt: "Diagram of the ONCE framework (Liu et al., 2024): GPT-3.5 prompting enriches the data, a fine-tuned LLaMA replaces the content encoder of the recommender"
 papers:
   - label: Paper
     href: /ONCE_Paper.pdf

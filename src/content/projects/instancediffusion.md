@@ -1,8 +1,10 @@
 ---
 title: InstanceDiffusion, Fully Customised
 summary: GPT-4 plans the layout, InstanceDiffusion draws it. Automating instance-level control in text-to-image generation, judged by people and a VLM.
-order: 3
+order: 6
 tags: [Diffusion, LLMs, VLMs]
+cover: ../../assets/projects/instancediffusion/cover.png
+coverAlt: "A layout of numbered boxes next to the image InstanceDiffusion generated from it: four coloured teddy bears in front of a pink castle (Wang et al., 2024)"
 featured: false
 # papers:
 #   - label: Paper

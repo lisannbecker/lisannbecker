@@ -4,6 +4,8 @@ summary: A plug-and-play diffusion model that learns how agents move and pulls d
 order: 1
 year: 2025
 tags: [MSc thesis, Diffusion, Robotics]
+cover: ../../assets/projects/se3-motion-prior/cover.png
+coverAlt: "Predicted robot trajectory: past poses in white, a yellow density cloud of sampled futures, and the SLAM and corrected SLAM paths"
 featured: true
 papers:
   - label: Thesis

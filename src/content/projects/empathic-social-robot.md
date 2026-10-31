@@ -3,6 +3,8 @@ title: Multi-Modal Social Robot
 summary: A NAO robot that reads emotion from voice, words and face, tested with people in text-only and multimodal conversations.
 order: 9
 tags: [Robotics, Emotion recognition, HRI]
+cover: ../../assets/projects/empathic-social-robot/cover.jpg
+coverAlt: "A NAO robot seen from above, looking up with glowing white eyes"
 papers:
   - label: Paper
     href: /SIR_Report.pdf
