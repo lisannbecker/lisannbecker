@@ -269,11 +269,19 @@ const backgroundStyle = (org: string) => {
   }
 
   /* .is-touched: on touch screens the colour comes up while a finger rests on the row, including
-     while it scrolls the page, without needing a tap (see the script below). */
-  .rows li:hover::before,
+     while it scrolls the page, and goes again when the finger lifts (see the script below).
+     :hover only counts on devices with a real pointer: phones leave a touched element in
+     :hover after the finger lifts, which kept the colour on. */
   .rows li.is-touched::before {
     opacity: 0.55;
     filter: saturate(1);
+  }
+
+  @media (hover: hover) {
+    .rows li:hover::before {
+      opacity: 0.55;
+      filter: saturate(1);
+    }
   }
 
   /* On dark paper, multiply would turn everything black, so invert and lighten instead. */
@@ -285,8 +293,14 @@ const backgroundStyle = (org: string) => {
       opacity: 0.22;
     }
 
-    .rows li:hover::before,
     .rows li.is-touched::before {
+      filter: invert(1) hue-rotate(180deg) saturate(1);
+      opacity: 0.4;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) and (hover: hover) {
+    .rows li:hover::before {
       filter: invert(1) hue-rotate(180deg) saturate(1);
       opacity: 0.4;
     }
