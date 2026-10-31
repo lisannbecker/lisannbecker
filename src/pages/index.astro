@@ -53,6 +53,18 @@ const backgroundStyle = (org: string) => {
       <p class="intro" data-fold style="--i: 3">
         {profile.intro}
       </p>
+      <ul class="socials" data-fold style="--i: 4">
+        <li>
+          <a href={profile.github} aria-label="GitHub">
+            <span class="icon" style="--icon: url(/github-white.png)" aria-hidden="true"></span>
+          </a>
+        </li>
+        <li>
+          <a class="linkedin" href={profile.linkedin} aria-label="LinkedIn">
+            <span class="icon" style="--icon: url(/linkedin.png)" aria-hidden="true"></span>
+          </a>
+        </li>
+      </ul>
     </div>
 
     <aside class="now" aria-labelledby="now-title">
@@ -157,6 +169,43 @@ const backgroundStyle = (org: string) => {
     font-size: var(--text-lg);
     line-height: 1.5;
     color: var(--muted);
+  }
+
+  .socials {
+    display: flex;
+    gap: 0.125rem;
+    margin-top: 0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .socials a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 2rem;
+    height: 2rem;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+
+  .socials a:hover,
+  .socials a:focus-visible {
+    color: var(--highlight);
+  }
+
+  .socials .icon {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    background: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+    mask: var(--icon) center / contain no-repeat;
+  }
+
+  .socials .linkedin .icon {
+    width: 1.35rem;
+    height: 1.35rem;
   }
 
   .rows,
