@@ -1,7 +1,7 @@
 ---
 title: Vision for Autonomous Robots
 summary: 'Three labs on a 12 cm robot: following ceiling lines, localising with ArUco markers to play curling, and mapping a maze from video.'
-order: 3
+order: 2
 tags: [Robotics, Computer vision]
 cover: ../../assets/projects/vision-autonomous-robots/cover.png
 coverAlt: "Fisheye view from the robot on the lab's artificial turf, looking at a football goal, with detected ArUco markers 35, 89 and 99 boxed in green"

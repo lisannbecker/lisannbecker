@@ -1,7 +1,7 @@
 ---
 title: Night Drive? Not Yet.
 summary: LiDAR doesn't need daylight, yet its detectors still fail at night. Tracing the drop to imbalanced data, and retraining to close part of the gap.
-order: 4
+order: 5
 tags: [Computer vision, LiDAR, Autonomous driving]
 cover: ../../assets/projects/night-drive/cover.png
 coverAlt: "Night and rainy street scenes from nuScenes with 3D detection boxes drawn around cars and pedestrians"

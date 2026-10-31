@@ -1,7 +1,7 @@
 ---
 title: Queue Cue
 summary: Computer vision watches the game screen and turns the room lights green when a match is found, so queuing no longer means waiting at the desk.
-order: 5
+order: 4
 tags: [Smart home, DIY]
 featured: true
 # To add pictures, put them in src/assets/projects/queue-cue/ and uncomment:
