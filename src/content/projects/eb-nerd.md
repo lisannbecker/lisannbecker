@@ -9,7 +9,7 @@ papers:
   - label: Paper
     href: /ONCE_Paper.pdf
 poster: /RecSysPoster.pdf
-# code: https://github.com/...
+code: https://github.com/lisannbecker/ONCE-extension
 ---
 
 A content-based news recommender is only as good as its understanding of the articles. ONCE (Liu et al., 2024) proposed bringing in LLMs on two fronts. Open-source models like LLaMA replace the content encoder and are fine-tuned to produce richer article embeddings. Closed-source models like GPT-3.5 enrich the data itself, rewriting titles to be more informative and inferring users' interests from their reading history.

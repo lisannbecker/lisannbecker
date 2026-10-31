@@ -10,7 +10,7 @@ papers:
   - label: Paper
     href: /What%20Mechanisms%20Does%20Knowledge%20Distillation%20Distill.pdf
 poster: /6.0%20A0.pdf
-# code: https://github.com/...
+code: https://github.com/lisannbecker/crosscoder-model-diff-extension
 ---
 
 Compression is how large models become practical: fine-tune a base model for a task, distil a big teacher into a small student, or ship a smaller sibling. Benchmarks show whether the compressed model gives the same answers. They don't show whether it reaches them the same way, which matters if the original was studied or audited and those findings are supposed to carry over.

@@ -13,7 +13,7 @@ papers:
   - label: Lab 3 · Maze
     href: /VAR_Group_5_Lab_3__Maze_.pdf
 # poster: /...
-# code: https://github.com/...
+code: https://github.com/m-krastev/var_extensions
 ---
 
 Three labs, each a step toward a robot that finds its own way using only its cameras. The robot was a RAE: four wheels, four stereo cameras and a body 12 cm across.

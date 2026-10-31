@@ -10,7 +10,7 @@ featured: false
 #   - label: Paper
 #     href: /...
 poster: /DL2%20Poster.pdf
-# code: https://github.com/...
+code: https://github.com/Jellemvdl/InstanceDiffusion-extension
 ---
 
 InstanceDiffusion gives text-to-image models fine-grained control. Instead of describing a whole scene in one prompt, you specify each object separately, with its own description and a location given as a bounding box, mask, point or scribble. The catch is that someone has to write all of that by hand.
