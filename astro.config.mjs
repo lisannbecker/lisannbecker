@@ -1,6 +1,7 @@
 import { defineConfig, fontProviders } from 'astro/config';
 
 export default defineConfig({
+  site: 'https://lisannbecker.com',
   // Fonts are downloaded at build time and served from your own site.
   fonts: [
     {
