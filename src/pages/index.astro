@@ -120,6 +120,22 @@ const backgroundStyle = (org: string) => {
     <a class="arrow-link label more-link" href="/projects">All</a>
   </section>
 </Base>
+
+<script>
+  // Touch screens have no hover, so light up a "Now" row's picture while a finger is on it.
+  // Passive listeners never delay scrolling; the class drops when the finger lifts.
+  const rows = document.querySelectorAll<HTMLLIElement>('.rows li');
+  const release = () => rows.forEach((row) => row.classList.remove('is-touched'));
+
+  rows.forEach((row) => {
+    row.addEventListener('touchstart', () => row.classList.add('is-touched'), { passive: true });
+  });
+  document.addEventListener('touchend', release, { passive: true });
+  document.addEventListener('touchcancel', release, { passive: true });
+  // Coming back from a linked page, the row may still be marked from the tap that left.
+  window.addEventListener('pageshow', release);
+</script>
+
 <style>
   /* Wide screens: name and intro on the left, "Now" on the right.
      Narrower: "Now" drops below as its own section. */
@@ -252,7 +268,10 @@ const backgroundStyle = (org: string) => {
       filter 0.5s var(--ease-fold);
   }
 
-  .rows li:hover::before {
+  /* .is-touched: on touch screens the colour comes up while a finger rests on the row, including
+     while it scrolls the page, without needing a tap (see the script below). */
+  .rows li:hover::before,
+  .rows li.is-touched::before {
     opacity: 0.55;
     filter: saturate(1);
   }
@@ -266,7 +285,8 @@ const backgroundStyle = (org: string) => {
       opacity: 0.22;
     }
 
-    .rows li:hover::before {
+    .rows li:hover::before,
+    .rows li.is-touched::before {
       filter: invert(1) hue-rotate(180deg) saturate(1);
       opacity: 0.4;
     }
