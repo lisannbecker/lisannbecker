@@ -123,5 +123,23 @@ const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
       // Coming back from the linked page, the link may still be lit from the tap that left.
       addEventListener('pageshow', release);
     </script>
+
+    <!-- Let a link's highlighter stroke finish sweeping in before the page changes. -->
+    <script>
+      // A quick tap leaves while the stroke is still sweeping in, and the page transition then
+      // shows it stopped just short of the end. So hold the navigation until it has finished.
+      // Clicks meant for a new tab or window go through as usual.
+      addEventListener('click', (event) => {
+        if (event.defaultPrevented || event.button !== 0) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        const link = (event.target as Element).closest('a');
+        const sweeping = link?.querySelector('.hl')?.getAnimations() ?? [];
+        if (!link || link.target || sweeping.length === 0) return;
+        event.preventDefault();
+        Promise.allSettled(sweeping.map((animation) => animation.finished)).then(() =>
+          location.assign(link.href),
+        );
+      });
+    </script>
   </body>
 </html>
