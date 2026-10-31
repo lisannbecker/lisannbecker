@@ -18,6 +18,8 @@ const now = [
   education[0],
 ];
 const featured = (await getProjects()).filter((project) => project.data.featured);
+// Set to true to show the Origami CV link beside the social icons again.
+const showOrigamiIcon = false;
 
 // Shorter names for the "Now" rows only, so each fits on one line. The resume keeps the full names.
 const shortNames: Record<string, string> = {
@@ -64,11 +66,11 @@ const backgroundStyle = (org: string) => {
             <span class="icon" style="--icon: url(/linkedin.png)" aria-hidden="true"></span>
           </a>
         </li>
-        <li>
+        {showOrigamiIcon && <li>
           <a class="origami" href="https://www.origamicv.com" aria-label="Origami CV">
             <span class="icon" style="--icon: url(/favicon-origami-64.svg)" aria-hidden="true"></span>
           </a>
-        </li>
+        </li>}
       </ul>
     </div>
 
