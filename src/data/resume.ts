@@ -13,7 +13,7 @@ export const profile = {
   intro:
     'I build AI, data and automation systems, working directly with the teams who use them.',  // Top of the resume page.
   summary:
-    'Trained in machine learning, with three years at Tesla building LLM tools, data pipelines, analytics and automations. Most of that work happened side by side with business teams: scoping problems with them, building the solution, and training people to use it.',
+    'Trained in artificial intelligence, I build LLM tools, data pipelines, analytics and automations. For three years at Tesla, that work happened side by side with business teams: scoping problems with them, building the solution, and training people to use it.',
 };
 
 export interface Role {

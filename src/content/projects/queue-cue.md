@@ -1,6 +1,6 @@
 ---
 title: Queue Cue
-summary: Video game queue pops that make your home light up.
+summary: Computer vision watches the game screen and turns the room lights green when a match is found, so queuing no longer means waiting at the desk.
 order: 7
 tags: [Smart home, DIY]
 featured: true
@@ -10,24 +10,23 @@ featured: true
 # images:
 #   - src: ../../assets/projects/queue-cue/detail.jpg
 #     alt: Describe what the picture shows
+# papers:
+#   - label: Paper
+#     href: /...
+# poster: /...
+# code: https://github.com/...
 ---
 
-<!-- Placeholder. Suggested structure: Problem · Approach · Results · What I learned -->
+Online matchmaking can take minutes, and when a match is found there's only a short window to accept it. Miss it and you're back in the queue. Queue Cue makes the moment impossible to miss from anywhere in the room.
 
-## Header 1
+## Watching the screen
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+The game's video runs through an HDMI capture card. Every tenth frame, about three times a second, the script shrinks the frame, converts it to greyscale and crops it to the centre of the screen, where the "match found" dialog appears. It then compares that crop with a saved screenshot of each game's pop-up using template matching. A correlation above 80% counts as a match.
 
-## Header 2
+The script only watches while a supported game is open, currently League of Legends and Counter-Strike 2, and only loads the templates for games that are running.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+## Making the room react
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+When a match pops, the lights switch on, turn green and pulse. Once the dialog is gone, every light returns to exactly the state, brightness and colour it had before.
 
-## Header 3
-
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
-
-## Header 4
-
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+It's still in progress. Light control is moving from the Philips Hue bridge to Home Assistant, detection is moving onto a Raspberry Pi, and where games offer an API, I'd like to use it instead of watching the screen.

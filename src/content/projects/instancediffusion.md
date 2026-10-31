@@ -1,27 +1,24 @@
 ---
 title: InstanceDiffusion, Fully Customised
-summary: VLMs for instance-specific image generation.
+summary: GPT-4 plans the layout, InstanceDiffusion draws it. Automating instance-level control in text-to-image generation, judged by people and a VLM.
 order: 3
 tags: [Diffusion, LLMs, VLMs]
 featured: false
+# papers:
+#   - label: Paper
+#     href: /...
+poster: /DL2%20Poster.pdf
+# code: https://github.com/...
 ---
 
-<!-- Placeholder. Suggested structure: Problem · Approach · Results · What I learned -->
+InstanceDiffusion gives text-to-image models fine-grained control. Instead of describing a whole scene in one prompt, you specify each object separately, with its own description and a location given as a bounding box, mask, point or scribble. The catch is that someone has to write all of that by hand.
 
-## Header 1
+## Letting an LLM plan the layout
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+We first reproduced InstanceDiffusion's results on 500 images, a tenth of the evaluation set, since every image is expensive to generate. We then built GPT-4 into its UniFusion block, the part that feeds instance-level conditions into the model. From an ordinary prompt, GPT-4 writes the per-object descriptions and bounding boxes itself, taking on the multiple objects and spatial relationships that make complex prompts hard to follow.
 
-## Header 2
+## Checking the pictures
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Generated images are hard to score automatically, so we evaluated them in two ways. Human raters judged how realistic each image looked. CogVLM, a vision-language model, checked whether the image actually showed what its description asked for, which let us compare where objects ended up with the boxes GPT-4 had planned.
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-
-## Header 3
-
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
-
-## Header 4
-
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+*With Anesa Ibrahimi, Jelle van der Lee, Richter van Emmerik and Amalia Stuger.*

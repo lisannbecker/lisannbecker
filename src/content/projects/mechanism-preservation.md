@@ -1,27 +1,38 @@
 ---
 title: Mechanism Preservation Across Model Compression
-summary: Do compressed models keep the internal mechanisms of the original?
+summary: A compressed model can match the original's answers without working the same way inside. Tracing which mechanisms survive distillation and fine-tuning.
 order: 2
 tags: [Interpretability, Model compression]
 featured: true
+papers:
+  - label: Paper
+    href: /What%20Mechanisms%20Does%20Knowledge%20Distillation%20Distill.pdf
+poster: /6.0%20A0.pdf
+# code: https://github.com/...
 ---
 
-<!-- Placeholder. Suggested structure: Problem · Approach · Results · What I learned -->
+Compression is how large models become practical: fine-tune a base model for a task, distil a big teacher into a small student, or ship a smaller sibling. Benchmarks show whether the compressed model gives the same answers. They don't show whether it reaches them the same way, which matters if the original was studied or audited and those findings are supposed to carry over.
 
-## Header 1
+## A shared dictionary for two models
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+We compared models from the inside using crosscoders. A crosscoder is a sparse autoencoder trained on the activations of two models at once. It learns a single set of features that has to reconstruct both, so each feature can be checked for whether it is shared or belongs to only one of them.
 
-## Header 2
+We looked at three kinds of transformation, each at the first, middle and final layer:
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+- **Fine-tuning:** Gemma-2-2B against its instruction-tuned version
+- **Distillation:** GPT-2 against its distilled student
+- **Scale:** Pythia-160M against Pythia-70M
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+Each pair got two scores: how well the shared features reconstruct both models, and how closely the two feature spaces align (CCA).
 
-## Header 3
+## What survives compression
 
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
+Fine-tuning leaves the first layers almost untouched (CCA 0.999) and changes later layers more, consistent with early layers extracting general features and later ones specialising for the task.
 
-## Header 4
+Distillation follows a different shape. Similarity dips in the middle layer and partly recovers at the end (0.94, 0.60, 0.72). In that middle layer the student reconstructs the teacher's features well but organises them differently: similar outputs, reshuffled internals.
 
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+The two Pythia sizes scored low throughout (around 0.3), as expected for genuinely different models. That served as a check that the method tells different models apart.
+
+If a compressed model is meant to inherit what is known about the original, distillation's middle layers are where that assumption is weakest.
+
+*With Krijn Dignum, Morris de Haan, Gjalt Hoekstra and Aaron Kuin, supervised by Leonard Bereska.*

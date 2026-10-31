@@ -71,7 +71,7 @@ body {
 /* Overscroll colour: browsers fill the area revealed by overscrolling with the html background
    (Safari draws body's on top, so body stays transparent and the paper sits on header and main).
    A script in Base.astro adds .near-end past the middle of the page, so the bounce at the bottom
-   is black like the footer and the bounce at the top matches the page. */
+   matches the black footer and the bounce at the top matches the page. */
 html {
   background: var(--paper);
 }

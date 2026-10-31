@@ -1,26 +1,27 @@
 ---
 title: EB-NeRD Challenge
-summary: Using open- and closed-source LLMs to boost content recommendation.
-order: 5
+summary: Do LLMs make news recommendations better? Reproducing ONCE on EB-NeRD, with LLaMA encoding articles and GPT-3.5 enriching them.
+order: 6
 tags: [Recommender systems, LLMs]
+papers:
+  - label: Paper
+    href: /ONCE_Paper.pdf
+poster: /RecSysPoster.pdf
+# code: https://github.com/...
 ---
 
-<!-- Placeholder. Suggested structure: Problem · Approach · Results · What I learned -->
+A content-based news recommender is only as good as its understanding of the articles. ONCE (Liu et al., 2024) proposed bringing in LLMs on two fronts. Open-source models like LLaMA replace the content encoder and are fine-tuned to produce richer article embeddings. Closed-source models like GPT-3.5 enrich the data itself, rewriting titles to be more informative and inferring users' interests from their reading history.
 
-## Header 1
+We reproduced ONCE on EB-NeRD, the dataset from Danish newspaper Ekstra Bladet: 2.7 million users, over 600 million impressions and more than 120,000 articles.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+## Fitting it in
 
-## Header 2
+The original experiments had twice the memory we did. LLaMA-13B didn't fit, so we used LLaMA-7B, fine-tuning only its top layers with LoRA. Getting the pipeline to read EB-NeRD meant reworking how the data is tokenised, including a multilingual tokeniser for the Danish text.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Of the three recommendation models we tested, NRMS, NAML and Fastformer, Fastformer performed best with LLaMA as its encoder. The full ONCE setup, adding GPT-3.5's enriched data on top, did not improve on the encoder alone. The most likely cause is that the generated data wasn't properly integrated into training, an issue other researchers have reported and one we couldn't resolve with the original author in the time we had.
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+## Sentiment as a signal
 
-## Header 3
+Every EB-NeRD article carries a sentiment label, which ONCE doesn't use. Adding it as a feature improved NAML and NRMS on every metric, by up to about 1%, while Fastformer got slightly worse. Small gains, but they support the idea behind ONCE that richer article information helps, and show that how much it helps depends on the model.
 
-Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet.
-
-## Header 4
-
-Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur.
+*With Anesa Ibrahimi and Richter van Emmerik.*

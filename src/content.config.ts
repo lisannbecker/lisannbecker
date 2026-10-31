@@ -18,6 +18,10 @@ const projects = defineCollection({
       cover: image().optional(),
       coverAlt: z.string().optional(),
       images: z.array(z.object({ src: image(), alt: z.string() })).default([]),
+      // Files in public/ are referenced from the site root, e.g. /ONCE_Paper.pdf
+      papers: z.array(z.object({ label: z.string(), href: z.string() })).default([]),
+      poster: z.string().optional(),
+      code: z.url().optional(),
       links: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
     }),
 });

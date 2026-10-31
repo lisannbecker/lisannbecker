@@ -14,8 +14,15 @@ export async function getStaticPaths() {
 }
 
 const { project, next } = Astro.props;
-const { title, summary, year, tags, cover, coverAlt, images, links } = project.data;
+const { title, summary, year, tags, cover, coverAlt, images, papers, poster, code, links } = project.data;
 const { Content } = await render(project);
+
+const resources = [
+  ...papers,
+  ...(poster ? [{ label: 'Poster', href: poster }] : []),
+  ...(code ? [{ label: 'Code', href: code }] : []),
+  ...links,
+];
 ---
 
 <Base title={title} description={summary}>
@@ -27,9 +34,9 @@ const { Content } = await render(project);
       <h1 class="serif" data-fold style={`--i: 1; view-transition-name: project-${project.id}`}>{title}</h1>
       <p class="summary" data-fold style="--i: 2">{summary}</p>
       {
-        links.length > 0 && (
+        resources.length > 0 && (
           <p class="links" data-fold style="--i: 3">
-            {links.map((link) => (
+            {resources.map((link) => (
               <a class="arrow-link" href={link.href}>
                 {link.label}
               </a>

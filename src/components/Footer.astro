@@ -28,10 +28,17 @@ const year = new Date().getFullYear();
 </footer>
 
 <style>
-  /* A full-width black bar; the content inside still lines up with the rest of the page. */
+  /* A full-width black bar in both colour schemes. The content inside still lines up with the
+     rest of the page. */
   footer {
-    background: #000;
-    color: #d6d2ca;
+    --footer-bg: #000;
+    --footer-ink: #d6d2ca;
+    --footer-strong: #fff;
+    --footer-rule: rgb(255 255 255 / 0.3);
+    --footer-icon-hover: var(--highlight);
+
+    background: var(--footer-bg);
+    color: var(--footer-ink);
   }
 
   /* Email and © at the top of the bar, the icons on its bottom edge, with equal padding above
@@ -58,11 +65,11 @@ const year = new Date().getFullYear();
   }
 
   a {
-    text-decoration-color: rgb(255 255 255 / 0.3);
+    text-decoration-color: var(--footer-rule);
   }
 
   a:hover {
-    color: #fff;
+    color: var(--footer-strong);
     text-decoration-color: currentColor;
   }
 
@@ -85,7 +92,7 @@ const year = new Date().getFullYear();
 
   .icon-link:hover,
   .icon-link:focus-visible {
-    color: var(--highlight);
+    color: var(--footer-icon-hover);
   }
 
   .icon {

@@ -1,0 +1,128 @@
+---
+// Alternative to /projects: the same projects as a text-only index, no covers or crease patterns.
+import Base from '../../layouts/Base.astro';
+import { getProjects, projectNumber } from '../../utils/projects';
+
+const projects = await getProjects();
+---
+
+<Base title="Projects" description="AI and coding projects by Lisann Becker.">
+  <section class="wrap intro">
+    <h1 class="serif" data-fold style="--i: 1">
+      Research, challenges, things built for fun
+    </h1>
+  </section>
+
+  <section class="wrap">
+    <ol class="index">
+      {
+        projects.map((project, i) => (
+          <li>
+            <span class="crease" data-fold style={`--i: ${i}`} aria-hidden="true" />
+            <a href={`/projects/${project.id}`} data-fold style={`--i: ${i}`}>
+              <span class="label number">{projectNumber(project.data.order)}</span>
+              <span class="main">
+                <span class="title serif" style={`view-transition-name: project-${project.id}`}>
+                  <span class="hl">{project.data.title}</span>
+                </span>
+                <span class="summary">{project.data.summary}</span>
+              </span>
+              <span class="label meta">
+                {project.data.year && <span>{project.data.year}</span>}
+                {project.data.tags.map((tag) => <span>{tag}</span>)}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</Base>
+
+<style>
+  .intro {
+    padding-top: clamp(2.5rem, 8vw, 6rem);
+    padding-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  h1 {
+    margin-top: 1.25rem;
+    font-size: var(--text-xl);
+    line-height: 1.2;
+  }
+
+  .index {
+    padding: 0;
+    list-style: none;
+  }
+
+  .crease {
+    display: block;
+  }
+
+  .index li:first-child .crease {
+    background: var(--ink);
+  }
+
+  /* Number, then title and summary. On wide screens the tags get their own column on the
+     right, one per line, so the rows read like a table of contents. */
+  .index a {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    gap: 0.75rem 1rem;
+    align-items: baseline;
+    padding-block: 1.5rem 1.75rem;
+    text-decoration: none;
+  }
+
+  .main {
+    display: block;
+  }
+
+  .title {
+    display: block;
+    font-size: var(--text-xl);
+    line-height: 1.15;
+  }
+
+  .summary {
+    display: block;
+    max-width: 38rem;
+    margin-top: 0.5rem;
+    color: var(--muted);
+  }
+
+  .meta {
+    grid-column: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 0;
+  }
+
+  .meta span + span::before {
+    content: ' / ';
+    white-space: pre;
+  }
+
+  @media (min-width: 56rem) {
+    .index a {
+      grid-template-columns: 3.5rem minmax(0, 1fr) 13rem;
+      gap: 2rem;
+    }
+
+    .meta {
+      grid-column: 3;
+      flex-direction: column;
+      text-align: right;
+    }
+
+    .meta span + span::before {
+      content: none;
+    }
+  }
+
+  .index a:hover .meta,
+  .index a:focus-visible .meta {
+    color: var(--ink);
+  }
+</style>
