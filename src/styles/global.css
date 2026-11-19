@@ -28,6 +28,10 @@
   --text-xl: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);
   --text-display: clamp(3rem, 1.8rem + 5vw, 6rem);
 
+  /* Perforated paper: a field of small punched dots across the top of each page (see main::before). */
+  --perf-gap: 0.75rem;
+  --perf-dot: color-mix(in oklab, var(--paper), var(--ink) 7%);
+
   --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
   --wide: 68rem;
   --narrow: 42rem;
@@ -75,6 +79,27 @@ html.near-end {
 body > header,
 main {
   background: var(--paper);
+}
+
+/* The perforated field: dots across the top of the page, fading out toward the bottom and
+   the sides. isolation keeps it above main's paper but under everything on the page. */
+main {
+  position: relative;
+  isolation: isolate;
+}
+
+main::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: min(56rem, 100dvh);
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle, var(--perf-dot) 0.8px, transparent 1.3px);
+  background-size: var(--perf-gap) var(--perf-gap);
+  background-position: center top;
+  -webkit-mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, #000 35%, transparent 100%);
+  mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, #000 35%, transparent 100%);
 }
 
 main {
