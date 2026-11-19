@@ -31,7 +31,7 @@ const resources = [
       <p class="label" data-fold>
         {[year, ...tags].filter(Boolean).join(' · ')}
       </p>
-      <h1 class="serif" data-fold style={`--i: 1; view-transition-name: project-${project.id}`}>{title}</h1>
+      <h1 class="display" data-fold style={`--i: 1; view-transition-name: project-${project.id}`}>{title}</h1>
       <p class="summary" data-fold style="--i: 2">{summary}</p>
       {
         resources.length > 0 && (
@@ -74,7 +74,7 @@ const resources = [
       <hr class="crease" data-fold />
       <a href={`/projects/${next.id}`}>
         <span class="label">Next project</span>
-        <span class="serif arrow-link"><span class="hl">{next.data.title}</span></span>
+        <span class="display arrow-link"><span class="hl">{next.data.title}</span></span>
       </a>
     </nav>
   </article>
@@ -88,7 +88,7 @@ const resources = [
 
   h1 {
     margin-top: 1rem;
-    font-size: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+    font-size: calc(clamp(2.5rem, 1.6rem + 4vw, 4.5rem) * var(--display-scale));
     line-height: 1.02;
     letter-spacing: -0.02em;
   }
@@ -125,9 +125,9 @@ const resources = [
 
   .prose :global(h2) {
     margin-top: 1.5em;
-    font-family: var(--serif);
+    font-family: var(--display);
     font-weight: 400;
-    font-size: var(--text-xl);
+    font-size: calc(var(--text-xl) * var(--display-scale));
     line-height: 1.2;
   }
 
@@ -165,8 +165,8 @@ const resources = [
     text-decoration: none;
   }
 
-  .next .serif {
-    font-size: var(--text-xl);
+  .next .display {
+    font-size: calc(var(--text-xl) * var(--display-scale));
     line-height: 1.2;
   }
 </style>

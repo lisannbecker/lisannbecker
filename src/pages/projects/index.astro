@@ -8,7 +8,7 @@ const projects = await getProjects();
 
 <Base title="Projects" description="AI and coding projects by Lisann Becker.">
   <section class="wrap intro">
-    <h1 class="serif" data-fold style="--i: 1">
+    <h1 class="display" data-fold style="--i: 1">
       Research, challenges, things built for fun
     </h1>
   </section>
@@ -34,7 +34,7 @@ const projects = await getProjects();
 
   h1 {
     margin-top: 1.25rem;
-    font-size: var(--text-xl);
+    font-size: calc(var(--text-xl) * var(--display-scale));
     line-height: 1.2;
   }
 

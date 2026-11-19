@@ -1,20 +1,24 @@
 /* ---------- Tokens ---------- */
 
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
 
-  --paper: #ebebeb;
-  --surface: #f5f5f5;
-  --ink: #1d1b18;
-  --muted: #6e685f;
-  --line: #d6d6d6;
-  /* Neon highlighter: a solid background, never a text colour. Text on it flips to the
-     opposite of the page text: white in light mode, black in dark mode. */
+  --paper: #141311;
+  --surface: #1c1a17;
+  --ink: #ece7de;
+  --muted: #9b948a;
+  --line: #2f2c27;
+  /* Neon highlighter: a solid background, never a text colour. Text on it is black. */
   --highlight: #f2ff00;
-  --on-highlight: #ececec;
-  --flap: #d4d4d4;
+  --on-highlight: #000;
+  --flap: #2a2723;
 
-  --serif: var(--font-serif), Georgia, serif;
+  /* Display face (Satoshi; formerly Erode, see astro.config.mjs).
+     --display-scale multiplies every display font-size, since faces differ in how large they run. */
+  --display: var(--font-display), system-ui, sans-serif;
+  --display-weight: 400;
+  --display-tracking: -0.02em;
+  --display-scale: 0.88;
   --sans: var(--font-sans), system-ui, sans-serif;
   --mono: var(--font-mono), ui-monospace, monospace;
 
@@ -29,18 +33,6 @@
   --narrow: 42rem;
 
   --ease-fold: cubic-bezier(0.2, 0.7, 0.1, 1);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #141311;
-    --surface: #1c1a17;
-    --ink: #ece7de;
-    --muted: #9b948a;
-    --line: #2f2c27;
-    --flap: #2a2723;
-    --on-highlight: #000;
-  }
 }
 
 /* ---------- Base ---------- */
@@ -182,10 +174,10 @@ a:focus-visible .hl {
   color: var(--muted);
 }
 
-.serif {
-  font-family: var(--serif);
-  font-weight: 400;
-  letter-spacing: -0.01em;
+.display {
+  font-family: var(--display);
+  font-weight: var(--display-weight);
+  letter-spacing: var(--display-tracking);
 }
 
 /* Links with a › chevron after them.

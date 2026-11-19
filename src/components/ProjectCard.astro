@@ -24,14 +24,14 @@ const meta = [cover ? number : null, year].filter(Boolean).join(' · ');
         ) : (
           <>
             <CreasePattern seed={order} />
-            <span class="numeral serif" aria-hidden="true">{number}</span>
+            <span class="numeral display" aria-hidden="true">{number}</span>
           </>
         )
       }
     </div>
     <div class="body">
       {meta && <p class="label">{meta}</p>}
-      <h2 class="title serif" style={`view-transition-name: project-${project.id}`}>
+      <h2 class="title display" style={`view-transition-name: project-${project.id}`}>
         <span class="hl">{title}</span>
       </h2>
       <p class="summary">{summary}</p>
@@ -102,7 +102,7 @@ const meta = [cover ? number : null, year].filter(Boolean).join(' · ');
     position: absolute;
     left: 1.25rem;
     bottom: 0.5rem;
-    font-size: 4.5rem;
+    font-size: calc(4.5rem * var(--display-scale));
     font-style: italic;
     line-height: 1;
     color: color-mix(in oklab, var(--muted) 55%, transparent);
@@ -115,7 +115,7 @@ const meta = [cover ? number : null, year].filter(Boolean).join(' · ');
   }
 
   .title {
-    font-size: 1.75rem;
+    font-size: calc(1.75rem * var(--display-scale));
     line-height: 1.15;
   }
 

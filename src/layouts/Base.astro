@@ -21,10 +21,9 @@ const fullTitle = title ? `${title} · ${profile.name}` : profile.name;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#ebebeb" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#141311" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <Font cssVariable="--font-serif" preload />
+    <Font cssVariable="--font-display" preload />
     <Font cssVariable="--font-sans" preload />
     <Font cssVariable="--font-mono" />
     <!-- is:inline = leave this script exactly as written, run it before the page paints -->

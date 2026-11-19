@@ -49,7 +49,7 @@ const backgroundStyle = (org: string) => {
   <section class="wrap hero">
     <div>
       <p class="label" data-fold>MSc AI, Based in Amsterdam</p>
-      <h1 class="name serif">
+      <h1 class="name display">
         <span data-fold style="--i: 1">Lisann</span>{' '}
         <span data-fold style="--i: 2">Becker</span>
       </h1>
@@ -107,7 +107,7 @@ const backgroundStyle = (org: string) => {
             <a href={`/projects/${project.id}`}>
               <span class="label">{projectNumber(project.data.order)}</span>
               <span>
-                <span class="title serif" style={`view-transition-name: project-${project.id}`}>
+                <span class="title display" style={`view-transition-name: project-${project.id}`}>
                   <span class="hl">{project.data.title}</span>
                 </span>
                 <span class="summary">{project.data.summary}</span>
@@ -148,7 +148,7 @@ const backgroundStyle = (org: string) => {
 
   .name {
     margin-top: 1.25rem;
-    font-size: var(--text-display);
+    font-size: calc(var(--text-display) * var(--display-scale));
     line-height: 0.95;
     letter-spacing: -0.03em;
   }
@@ -235,7 +235,9 @@ const backgroundStyle = (org: string) => {
   }
 
   /* The row's image: faint, softened colour, printed into the paper on the right and fading out
-     toward the text. Hovering the row brings it up to full strength. */
+     toward the text. Hovering the row brings it up to full strength.
+     On dark paper, multiply would turn everything black, so invert and lighten instead.
+     Inverting flips the hues too, so rotate them back: red stays red. */
   .rows li::before {
     content: '';
     position: absolute;
@@ -244,9 +246,9 @@ const backgroundStyle = (org: string) => {
     inset: 0 0 -1px 30%;
     z-index: -1;
     background: var(--bg) var(--bg-position, center) / var(--bg-size, cover) no-repeat;
-    filter: saturate(0);
-    mix-blend-mode: multiply;
-    opacity: 0.3;
+    filter: invert(1) hue-rotate(180deg) saturate(0);
+    mix-blend-mode: screen;
+    opacity: 0.22;
     mask-image: linear-gradient(to right, transparent, #000 60%);
     transition:
       opacity 0.5s var(--ease-fold),
@@ -259,33 +261,11 @@ const backgroundStyle = (org: string) => {
      :hover only counts on devices with a real pointer: phones leave a touched element in
      :hover after the finger lifts, which kept the colour on. */
   .rows li:has(.is-touched)::before {
-    opacity: 0.55;
-    filter: saturate(1);
+    filter: invert(1) hue-rotate(180deg) saturate(1);
+    opacity: 0.4;
   }
 
   @media (hover: hover) {
-    .rows li:hover::before {
-      opacity: 0.55;
-      filter: saturate(1);
-    }
-  }
-
-  /* On dark paper, multiply would turn everything black, so invert and lighten instead. */
-  @media (prefers-color-scheme: dark) {
-    /* Inverting flips the hues too, so rotate them back: red stays red. */
-    .rows li::before {
-      filter: invert(1) hue-rotate(180deg) saturate(0);
-      mix-blend-mode: screen;
-      opacity: 0.22;
-    }
-
-    .rows li:has(.is-touched)::before {
-      filter: invert(1) hue-rotate(180deg) saturate(1);
-      opacity: 0.4;
-    }
-  }
-
-  @media (prefers-color-scheme: dark) and (hover: hover) {
     .rows li:hover::before {
       filter: invert(1) hue-rotate(180deg) saturate(1);
       opacity: 0.4;
@@ -311,7 +291,7 @@ const backgroundStyle = (org: string) => {
 
   .title {
     display: block;
-    font-size: var(--text-xl);
+    font-size: calc(var(--text-xl) * var(--display-scale));
     line-height: 1.15;
   }
 

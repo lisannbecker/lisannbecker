@@ -11,7 +11,7 @@ export const profile = {
   linkedin: 'https://www.linkedin.com/in/lisannbecker',
   // Home page, under the name.
   intro:
-    'I build AI, data and automation systems, working directly with the teams who use them.',  // Top of the resume page.
+    'I build AI, data and automation systems, working directly with the teams who use them',  // Top of the resume page.
   summary:
     'Trained in artificial intelligence, I build LLM tools, data pipelines, analytics and automations. For three years at Tesla, that work happened side by side with business teams: scoping problems with them, building the solution, and training people to use it.',
 };
@@ -50,7 +50,7 @@ export const experience: Role[] = [
     points: [
       'Resume tool that interviews you, optimises your content for the job, and lets you fine-tune every detail of the layout.',
       'In post-launch hypercare stage, attracting 1000+ users monthly. Shipping fixes and improvements based on usage analytics and user feedback.',
-      'Tech stack: Next.js, React, TypeScript, Tailwind CSS, FastAPI (Python), PostgreSQL, PostHog, Playwright (PDF rendering) and Docker.',
+      'Tech stack: Next.js, React, TypeScript, Tailwind CSS, Astro, FastAPI (Python), PostgreSQL, PostHog, Playwright (PDF rendering) and Docker.',
     ],
   },
   {

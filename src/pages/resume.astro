@@ -17,7 +17,7 @@ const period = (start: string, end: string) => (start === end ? start : `${start
 
 <Base title="Resume" description={profile.summary}>
   <section class="wrap intro">
-    <h1 class="serif" data-fold style="--i: 1">{profile.summary}</h1>
+    <h1 class="display" data-fold style="--i: 1">{profile.summary}</h1>
     <ul class="meta label" data-fold style="--i: 2">
       <li>{profile.location}</li>
       <li>
@@ -150,7 +150,7 @@ const period = (start: string, end: string) => (start === end ? start : `${start
   h1 {
     max-width: 56rem;
     margin-top: 1.25rem;
-    font-size: var(--text-xl);
+    font-size: calc(var(--text-xl) * var(--display-scale));
     line-height: 1.2;
   }
 
