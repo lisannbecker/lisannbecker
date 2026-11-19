@@ -32,16 +32,18 @@ const shortNames: Record<string, string> = {
 // size: how the image fills the row. Default 'cover' fills it (cropping the edges); 'contain'
 // shows the whole image; '180% auto' zooms in; 'auto 80%' makes it 80% of the row's height.
 // position: where it sits in the row, e.g. 'center bottom'. Default 'center'.
-const backgrounds: Record<string, { src: string; size?: string; position?: string }> = {
+// hover: a different image to show, untouched by the filters, when the row is hovered or touched.
+const backgrounds: Record<string, { src: string; size?: string; position?: string; hover?: string }> = {
   Tesla: { src: '/teslarain.jpg' },
-  'Origami CV': { src: '/origami.svg', size: '120% auto', position: 'left 5.5rem top -4rem' },
+  'Origami CV': { src: '/origami.svg', size: '120% auto', position: 'left 5.5rem top -4rem', hover: '/origami-yellow.svg' },
   'University of Amsterdam': { src: '/nn-mlp.svg', size: '240% auto', position: '82.3% center' },
 };
 
 const backgroundStyle = (org: string) => {
   const bg = backgrounds[org];
   if (!bg) return '--bg: none';
-  return `--bg: url(${bg.src}); --bg-size: ${bg.size ?? 'cover'}; --bg-position: ${bg.position ?? 'center'}`;
+  const hover = bg.hover ? `; --bg-hover: url(${bg.hover})` : '';
+  return `--bg: url(${bg.src}); --bg-size: ${bg.size ?? 'cover'}; --bg-position: ${bg.position ?? 'center'}${hover}`;
 };
 ---
 
@@ -81,6 +83,7 @@ const backgroundStyle = (org: string) => {
           now.map((item, i) => (
             <li
               data-fold
+              class:list={{ 'has-hover-bg': backgrounds[item.org]?.hover }}
               style={`--i: ${i + 4}; ${backgroundStyle(item.org)}`}
             >
               <a href={`/resume#${entryId(item)}`}>
@@ -269,6 +272,22 @@ const backgroundStyle = (org: string) => {
     .rows li:hover::before {
       filter: invert(1) hue-rotate(180deg) saturate(1);
       opacity: 0.4;
+    }
+  }
+
+  /* Rows with a hover image (the yellow Origami CV logo) swap it in, shown in its own colours:
+     no invert, no blend. Same size, position and left-edge fade as the resting image. */
+  .rows li.has-hover-bg:has(.is-touched)::before {
+    background-image: var(--bg-hover);
+    filter: none;
+    mix-blend-mode: normal;
+  }
+
+  @media (hover: hover) {
+    .rows li.has-hover-bg:hover::before {
+      background-image: var(--bg-hover);
+      filter: none;
+      mix-blend-mode: normal;
     }
   }
 
