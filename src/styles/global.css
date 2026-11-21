@@ -12,6 +12,8 @@
   --highlight: #f2ff00;
   --on-highlight: #000;
   --flap: #2a2723;
+  /* Footer bar: the header icons' grey, lifted most of the way toward the off-white. */
+  --footer: color-mix(in srgb, var(--muted), var(--ink) 60%);
 
   /* Display face (Satoshi; formerly Erode, see astro.config.mjs).
      --display-scale multiplies every display font-size, since faces differ in how large they run. */
@@ -73,7 +75,7 @@ html {
 }
 
 html.near-end {
-  background: var(--muted);
+  background: var(--footer);
 }
 
 body > header,
