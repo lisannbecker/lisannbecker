@@ -34,7 +34,9 @@ const shortNames: Record<string, string> = {
 // position: where it sits in the row, e.g. 'center bottom'. Default 'center'.
 const backgrounds: Record<string, { src: string; size?: string; position?: string }> = {
   Tesla: { src: '/teslarain.jpg' },
-  'Origami CV': { src: '/origami.svg', size: '120% auto', position: 'left 5.5rem top -4rem' },
+  // Offsets in cqw (1% of the row's width) instead of rem, so the logo keeps the same spot in the
+  // row at every screen width. At full laptop width they equal the original left 5.5rem, top -4rem.
+  'Origami CV': { src: '/origami.svg', size: '120% auto', position: 'left 25.8cqw top -18.8cqw' },
   'University of Amsterdam': { src: '/nn-mlp.svg', size: '240% auto', position: '82.3% center' },
 };
 
@@ -157,16 +159,20 @@ const backgroundStyle = (org: string) => {
     margin-top: 2rem;
     font-size: var(--text-lg);
     line-height: 1.5;
+    color: var(--ink);
   }
 
-  /* Always highlighted, styled like selected text: a band behind each line, black text on it.
-     The yellow is softened toward the paper the same way the browser does with a selection. */
+  /* Highlight switched off for now. To bring it back, delete the "color: var(--ink)" line
+     above and uncomment this block.
+     Always highlighted, styled like selected text: a band behind each line, black text on it.
+     The yellow is softened toward the paper the same way the browser does with a selection.
   .intro span {
     background: color-mix(in srgb, var(--highlight) 80%, var(--paper));
     color: var(--on-highlight);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
+  */
 
   .socials {
     display: flex;
@@ -218,10 +224,12 @@ const backgroundStyle = (org: string) => {
   }
 
   /* Same row rhythm as the project list below. */
+  /* container-type lets a row's background image be positioned in cqw (see backgrounds above). */
   .rows li {
     border-bottom: 1px solid var(--line);
     position: relative;
     isolation: isolate;
+    container-type: inline-size;
   }
 
   /* The whole row links to that entry on the resume page. Years always sit under the title. */
