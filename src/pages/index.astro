@@ -54,7 +54,7 @@ const backgroundStyle = (org: string) => {
         <span data-fold style="--i: 2">Becker</span>
       </h1>
       <p class="intro" data-fold style="--i: 3">
-        {profile.intro}
+        <span>{profile.intro}</span>
       </p>
       <ul class="socials" data-fold style="--i: 4">
         <li>
@@ -81,7 +81,7 @@ const backgroundStyle = (org: string) => {
           now.map((item, i) => (
             <li
               data-fold
-              style={`--i: ${i + 4}; ${backgroundStyle(item.org)}`}
+              style={`--i: ${i + 5}; ${backgroundStyle(item.org)}`}
             >
               <a href={`/resume#${entryId(item)}`}>
                 <span>
@@ -122,19 +122,14 @@ const backgroundStyle = (org: string) => {
 </Base>
 
 <style>
-  /* Wide screens: name and intro on the left, "Now" on the right.
-     Narrower: "Now" drops below as its own section. */
+  /* Name, intro and icons, with the "Now" rows underneath: side by side on wide screens,
+     stacked on phones. */
   .hero {
-    display: grid;
-    gap: clamp(3.5rem, 8vw, 6rem) 4rem;
     padding-top: clamp(3rem, 12vw, 9rem);
   }
 
-  @media (min-width: 64rem) {
-    .hero {
-      grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
-      align-items: start;
-    }
+  .now {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
   }
 
   .more-link {
@@ -162,7 +157,15 @@ const backgroundStyle = (org: string) => {
     margin-top: 2rem;
     font-size: var(--text-lg);
     line-height: 1.5;
-    color: var(--muted);
+  }
+
+  /* Always highlighted, styled like selected text: a band behind each line, black text on it.
+     The yellow is softened toward the paper the same way the browser does with a selection. */
+  .intro span {
+    background: color-mix(in srgb, var(--highlight) 80%, var(--paper));
+    color: var(--on-highlight);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 
   .socials {
@@ -232,6 +235,21 @@ const backgroundStyle = (org: string) => {
 
   .rows li:last-child {
     border-bottom: 0;
+  }
+
+  /* Side by side: three equal columns, each with a crease line along its top. */
+  @media (min-width: 48rem) {
+    .rows {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem;
+    }
+
+    .rows li,
+    .rows li:last-child {
+      border-bottom: 0;
+      border-top: 1px solid var(--line);
+    }
   }
 
   /* The row's image: faint, softened colour, printed into the paper on the right and fading out
